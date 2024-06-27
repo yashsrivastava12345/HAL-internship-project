@@ -12,29 +12,28 @@ import numpy as np
 # specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
 
 # Get a reference to webcam #0 (the default one)
-lst=[r'faces_video.mp4',r'854097-hd_1920_1080_25fps.mp4',r'3253272-uhd_3840_2160_25fps.mp4',r'4265036-uhd_3840_2160_30fps.mp4']
+lst = [r'faces_video.mp4', r'854097-hd_1920_1080_25fps.mp4', r'3253272-uhd_3840_2160_25fps.mp4', r'4265036-uhd_3840_2160_30fps.mp4']
 video_capture = cv2.VideoCapture(lst[2])
 
 # Load a sample picture and learn how to recognize it.
-X = face_recognition.load_image_file("X.png")
-X_face_encoding = face_recognition.face_encodings(X)
 
 # Load a second sample picture and learn how to recognize it.
 Y = face_recognition.load_image_file("Y.png")
 Y_face_encoding = face_recognition.face_encodings(Y)
-
+#print(Y_face_encoding)
 Z = face_recognition.load_image_file("Z.png")
 Z_face_encoding = face_recognition.face_encodings(Z)
-
+#print(Z_face_encoding)
 W = face_recognition.load_image_file("W.png")
 W_face_encoding = face_recognition.face_encodings(W)
+#print(Z_face_encoding)
+#M, N, O, P= X_face_encoding[0], Y_face_encoding[0], Z_face_encoding[0], W_face_encoding[0]
 
 # Create arrays of known face encodings and their names
 known_face_encodings = [
-    X_face_encoding,
-    Y_face_encoding,
-    Z_face_encoding,
-    W_face_encoding
+    Z_face_encoding[0],
+    Y_face_encoding[0],
+    W_face_encoding[0]
 ]
 known_face_names = [
     "X",
@@ -52,11 +51,11 @@ process_this_frame = True
 while True:
     # Grab a single frame of video
     ret, frame = video_capture.read()
-
+    #print(frame)
     # Only process every other frame of video to save time
     if process_this_frame:
         # Resize frame of video to 1/4 size for faster face recognition processing
-        small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+        small_frame = cv2.resize(frame, (100, 100), fx=25, fy=25)
 
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
         rgb_small_frame = small_frame[:, :, ::-1]
@@ -72,9 +71,9 @@ while True:
             name = "Unknown"
 
             # # If a match was found in known_face_encodings, just use the first one.
-            # if True in matches:
-            #     first_match_index = matches.index(True)
-            #     name = known_face_names[first_match_index]
+            if True in matches:
+                first_match_index = matches.index(True)
+                name = known_face_names[first_match_index]
 
             # Or instead, use the known face with the smallest distance to the new face
             face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
@@ -101,9 +100,10 @@ while True:
         cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
         font = cv2.FONT_HERSHEY_DUPLEX
         cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+    frames = cv2.resize(frame,(500,500))
 
     # Display the resulting image
-    cv2.imshow('Video', frame)
+    cv2.imshow('Video', frames)
 
     # Hit 'q' on the keyboard to quit!
     if cv2.waitKey(1) & 0xFF == ord('q'):
