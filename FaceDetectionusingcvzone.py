@@ -34,12 +34,15 @@ while True:
                     check+=1
                     lstdir=os.listdir(path)
                     for i in lstdir:
+                        j=cv2.imread(i)
+                        #print(i)
                         crop2=cv2.cvtColor(cv2.resize(crop,[100,100]),cv2.COLOR_BGR2GRAY)
-                        compimg=cv2.cvtColor(cv2.resize(cv2.imread(i),[100,100]),cv2.COLOR_BGR2GRAY)
+                        compimg=cv2.cvtColor(cv2.resize(j if j is not None else crop,[100,100]),cv2.COLOR_BGR2GRAY)
+                        print(j if j is not None else "hello")
                         similarity_index, _ = ssim(crop2, compimg, full=True)
-                        print(similarity_index)
-                        
-                        
+                        if():
+                            pass
+                        #print(similarity_index)
                 cv2.circle(img, center, 5, (255, 0, 255), cv2.FILLED)
                 cvzone.putTextRect(img, f'{score}%', (x, y - 10))
                 cvzone.cornerRect(img, (x, y, w, h))
