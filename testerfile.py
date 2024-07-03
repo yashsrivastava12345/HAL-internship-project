@@ -7,6 +7,7 @@ img = ""
 # Perform face recognition using DeepFace
 try:
     dfs = DeepFace.find(img_path=img_path, db_path=db_path)
+    print(dfs)
     for i in dfs:
         for j in i:
             img=dfs[0][j].to_string(index=False)
